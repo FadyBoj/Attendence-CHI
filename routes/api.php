@@ -2,6 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\StudentController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -20,4 +23,21 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/qr',function () {
     return response()->json(["msg" => "This is a qr code test"]);
+});
+
+
+//Admin controller
+Route::controller(AdminController::class)->group(function (){
+    Route::post('/student','addStudent')->middleware('addStudentValidation');
+    Route::post('/courses','studentCourses');
+
+});
+
+
+//Student Constroller
+
+Route::controller(StudentController::class)->group(function (){
+    Route::post('/student-login','studentLogin')->middleware('studentLoginValidation');
+    Route::post('/take-attendence','takeAttendence');
+
 });

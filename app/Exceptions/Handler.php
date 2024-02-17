@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use App\Exceptions\CustomException;
 
 class Handler extends ExceptionHandler
 {
@@ -26,5 +27,15 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    public function render($request,Throwable $e) 
+    {
+        if ($e instanceof CustomException)
+        return response()->json(["msg" => $e->getMessage()],$e->getCode());
+
+    
+
+        return response()->json(["msg" => $e->getMessage()],500);
     }
 }
