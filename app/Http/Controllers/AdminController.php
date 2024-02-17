@@ -23,8 +23,8 @@ class AdminController extends Controller
 
         }
 
-        Student::create([
-            "id" => $data['id'],
+        $newStudent = Student::create([
+            "college_id" => $data['college_id'],
             "name" => $data['name'],
             "department" => $data["department"],
             "password" => $data['password']
@@ -33,7 +33,7 @@ class AdminController extends Controller
         foreach($data['courses'] as $course)
         {
             CourseStudent::create([
-                "student_id" => $data['id'],
+                "student_id" => $newStudent->id,
                 "course_id" => $course
             ]);
         }
@@ -46,8 +46,7 @@ class AdminController extends Controller
 
     public function studentCourses(Request $request) {
 
-        $studentId = $request->id;
-
+        $studentId = Student::where('college_id',$request->id)->first()->id;
         $courses = Student::find($studentId)->courses()->get();
 
         return response()->json(["Courses" => $courses]);

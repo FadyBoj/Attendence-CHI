@@ -7,16 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
-class Student extends Model
+
+
+class Student extends Authenticatable
 {
-    use HasFactory, HasApiTokens, Notifiable;
+    use HasFactory, HasApiTokens, Notifiable, HasUuids;
 
     protected $table = 'students';
     protected $primarykey = 'id';
 
     protected $fillable = [
-        "id",
+        "college_id",
         "name",
         "password",
         "department",

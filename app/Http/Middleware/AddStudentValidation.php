@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Exceptions\CustomException;
 use Exception;
 use Illuminate\Support\Facades\Hash;
+
     
 
 class AddStudentValidation
@@ -22,7 +23,7 @@ class AddStudentValidation
         try
         {
             $request->validateWithBag('studentValidation',[
-                "id" => "required|unique:students|min_digits:8|numeric",   
+                "college_id" => "required|unique:students|min_digits:8|numeric",   
                 "name" => "required|min:4|string",
                 "department" => "required|min:2|string",
                 "courses" => "array|required"
@@ -31,7 +32,7 @@ class AddStudentValidation
             ]);
 
             $request->merge([
-                "password" =>Hash::make($request->id)
+                "password" =>Hash::make($request->college_id)
             ]);
 
             

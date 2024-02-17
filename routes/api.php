@@ -36,8 +36,15 @@ Route::controller(AdminController::class)->group(function (){
 
 //Student Constroller
 
+
+
+    Route::controller(StudentController::class)->group(function (){
+        Route::post('/take-attendence','takeAttendence')->middleware('auth:api');
+    
+    });
+
 Route::controller(StudentController::class)->group(function (){
     Route::post('/student-login','studentLogin')->middleware('studentLoginValidation');
-    Route::post('/take-attendence','takeAttendence');
 
 });
+

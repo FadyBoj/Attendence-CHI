@@ -20,10 +20,10 @@ class StudentLoginValidation
         try
         {
             $request->validateWithBag("StudentLogin",[
-                "id" => "required|exists:students",
+                "college_id" => "required|exists:students",
                 "password" => "required"
             ],[
-                "id.required" => "The id field is required",
+                "college_id.required" => "The id field is required",
                 "id.exists" => "Student id not found"
             ]);
 

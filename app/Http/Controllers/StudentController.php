@@ -9,13 +9,16 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 
+
+
 class StudentController extends Controller
 {
     public function studentLogin(Request $request) 
     {
-        $credentials = $request->only("id","password");
+        $credentials = $request->only("college_id","password");
  
-        $student = Student::find($credentials['id']);
+        $studentId = Student::where('college_id',$credentials['college_id'])->first()->id;
+        $student = Student::find($studentId);
         $hashedPassword = $student->password;
 
         if (!hash::check($credentials['password'],$hashedPassword)) 
