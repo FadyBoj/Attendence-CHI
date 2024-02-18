@@ -61,7 +61,8 @@ Route::middleware(['customAuth'])->group(function(){
 
     Route::controller(DoctorController::class)->group(function(){
 
-        Route::post('/doctor/create-lecture','createLecture');
+        Route::post('/doctor/lecture','createLecture');
+        Route::delete('doctor/lecture','endLecture');
         Route::get('/doctor/course/{id}','getAttendence');
 
 

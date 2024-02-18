@@ -56,11 +56,31 @@ class DoctorController extends Controller
 
     public function getAttendence(Request $request, int $id)
     {
-        $attendence = Attendence::with('student')->where('course_id',$id)->get();
+    
+        $attendence = Attendence::with(['student' => function ($query) {
+            $query->select(['id','college_id', 'name','department']); // Include only specific attributes from the student table
+        }])->where('course_id', $id)->get();
 
         if(count($attendence) === 0)
         throw new CustomException("No attendence for course with id of $id",400);
 
         return response()->json(["msg" => $attendence],200);
+    }
+
+
+    // End lecture manually
+    public function endLecture(Request $request)
+    {
+        $request->validateWithBag('endLecture',[
+            "id" => "required|exists:active_lectures"
+        ],[
+            "id.exists" => "Active lecture id not found"
+        ]);
+
+        $id = $request->id;
+
+        ActiveLecture::where('id',$id)->delete();
+
+        return response()->json(["msg" => "Lecture Ended successfully"],200);
     }
 }
