@@ -70,5 +70,6 @@ class Kernel extends HttpKernel
         "studentLoginValidation" => \App\Http\Middleware\StudentLoginValidation::class,
         "customAuth" => \App\Http\Middleware\CustomAuthentication::class,
         "doctorAuthorize" => \App\Http\Middleware\DoctorAuthorization::class,
+        "attendenceValidation" => \App\Http\Middleware\AttendenceValidation::class,
     ];
 }

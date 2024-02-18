@@ -16,7 +16,6 @@ class DoctorController extends Controller
     {
         $request->validateWithBag("createLecture",[
             "id" => "required|exists:courses",
-            "minutes" => "numeric|required|min:1|max:150"
         ],[
             "id.exists" => "Course id not found"
         ]);
@@ -32,7 +31,7 @@ class DoctorController extends Controller
             if(!now()->gt($activeLecture->expireDate))
             throw new CustomException("Lecture session already exist",400);
             
-            $activeLecture->expireDate = now()->addMinutes($data['minutes']);
+            $activeLecture->expireDate = now()->addMinutes(120);
             $activeLecture->uniqueId = $uniqueId;
             $activeLecture->save();
         }
@@ -42,14 +41,12 @@ class DoctorController extends Controller
                 "id" => $data['id'],
                 "doctor_id" => $doctor->id,
                 "uniqueId" => $uniqueId,
-                "expireDate" => now()->addMinutes($data['minutes'])
+                "expireDate" => now()->addMinutes(120)
             ]);
         }
-    
 
         $qr = QrCode::size(400)->generate($data['id']."|$uniqueId");
 
-       
         return response($qr);
 
     }

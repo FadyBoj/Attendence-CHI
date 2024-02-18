@@ -40,11 +40,14 @@ Route::controller(AdminController::class)->group(function (){
 //Student Constroller
 
 
+Route::middleware('customAuth')->group(function() {
 
     Route::controller(StudentController::class)->group(function (){
-        Route::post('/take-attendence','takeAttendence')->middleware('customAuth');
+        Route::post('/take-attendence','takeAttendence')->middleware('attendenceValidation');
     
     });
+
+});
 
 Route::controller(StudentController::class)->group(function (){
     Route::post('/student-login','studentLogin')->middleware('studentLoginValidation');
