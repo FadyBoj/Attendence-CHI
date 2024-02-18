@@ -8,8 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-
-
+use function Laravel\Prompts\error;
 
 class StudentController extends Controller
 {
@@ -31,6 +30,20 @@ class StudentController extends Controller
 
     public function takeAttendence(Request $request)
     {
-        return response()->json(["msg" => "Importnant data"],200);
+        $user = $request->user;
+        $sessionId = $request->sessionId;
+
+        $allSessions = session()->all();
+        error_log(json_encode($allSessions));
+
+        if(!$request->session()->has($sessionId))
+        throw new CustomException("Invalid QR or lecure already ended",400);
+
+        if(now()->gt(session()->get($sessionId)['expireDate']))
+        throw new CustomException("lecure already ended",400);
+
+        
+
+        // return response()->json(["msg" => "Importnant data"],200);
     }
 }

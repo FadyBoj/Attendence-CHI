@@ -42,6 +42,8 @@ class Kernel extends HttpKernel
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
         ],
     ];
 
@@ -67,5 +69,6 @@ class Kernel extends HttpKernel
         "addStudentValidation" => \App\Http\Middleware\AddStudentValidation::class,
         "studentLoginValidation" => \App\Http\Middleware\StudentLoginValidation::class,
         "customAuth" => \App\Http\Middleware\CustomAuthentication::class,
+        "doctorAuthorize" => \App\Http\Middleware\DoctorAuthorization::class,
     ];
 }

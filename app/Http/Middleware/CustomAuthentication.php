@@ -24,12 +24,13 @@ class CustomAuthentication
             $token = $request->cookie("accessToken") ?: $request->bearerToken();
             $request->headers->set("Authorization","Bearer " . $token);
 
-            if(!$token)
-            throw new CustomException("Token must be provided",401);
 
-            if(!Auth::guard('api')->check())
+            if(!Auth::guard('api')->check() || !$token)
             throw new CustomException("unauthenticated",401);
 
+            $user = Auth::guard('api')->user();
+
+            $request->merge(["user" => $user]);
 
              return $next($request);
         }

@@ -2,8 +2,11 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
+//Controllers
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\DoctorController;
 
 
 /*
@@ -39,7 +42,7 @@ Route::controller(AdminController::class)->group(function (){
 
 
     Route::controller(StudentController::class)->group(function (){
-        Route::post('/take-attendence','takeAttendence')->middleware('auth:api');
+        Route::post('/take-attendence','takeAttendence')->middleware('customAuth');
     
     });
 
@@ -48,3 +51,15 @@ Route::controller(StudentController::class)->group(function (){
 
 });
 
+
+//Doctors Controller
+
+Route::middleware(['customAuth'])->group(function(){
+
+    Route::controller(DoctorController::class)->group(function(){
+
+        Route::post('/doctor/create-lecture','createLecture');
+
+    });
+
+});
