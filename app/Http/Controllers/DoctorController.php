@@ -6,17 +6,41 @@ use App\Exceptions\CustomException;
 use Illuminate\Http\Request;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+
 
 
 //Models 
 use App\Models\ActiveLecture;
 use App\Models\Attendence;
 use App\Models\Course;
+use App\Models\Doctor;
 use App\Models\SignedStudent;
 use App\Models\Student;
 
+use function Laravel\Prompts\error;
+
 class DoctorController extends Controller
 {
+
+    //Doctor login
+
+    public function doctorLogin(Request $request)
+    {
+
+        $data = $request->all();
+        $doctorId = Doctor::where('name',$data['name'])->first();
+        $doctor = Doctor::find($doctorId)->first();
+
+
+        if (!Hash::check($data['password'],$doctor->password))
+        throw new CustomException("Name and password are mismatched",400);
+
+        $doctor->tokens()->delete();
+        $token = $doctor->createToken('ApiToken')->accessToken;
+        
+        return response()->json(["token" => $token]);
+    }
 
     public function createLecture(Request $request)
     {

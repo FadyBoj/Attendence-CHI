@@ -30,8 +30,10 @@ Route::get('/qr',function () {
 
 
 //Admin controller
+
 Route::controller(AdminController::class)->group(function (){
-    Route::post('/student','addStudent')->middleware('addStudentValidation');
+    Route::post('/admin/student','addStudent')->middleware('addStudentValidation');
+    Route::post('/admin/doctor','addDoctor')->middleware('addDoctorValidation');
     Route::post('/courses','studentCourses');
 
 });
@@ -58,7 +60,11 @@ Route::controller(StudentController::class)->group(function (){
 
 //Doctors Controller
 
-Route::middleware(['customAuth'])->group(function(){
+Route::controller(DoctorController::class)->group(function(){
+    Route::post('/doctor/login','doctorLogin')->middleware('doctorLoginValidation');
+});
+
+Route::middleware(['doctorAuth'])->group(function(){
 
     Route::controller(DoctorController::class)->group(function(){
 

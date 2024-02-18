@@ -45,6 +45,11 @@ return [
             'driver' => 'passport',
             'provider' => 'students',
         ],
+
+        'doctor' => [
+            'driver' => 'passport',
+            'provider' => 'doctors',
+        ],
     ],
 
     /*
@@ -73,6 +78,11 @@ return [
         'students' => [
             'driver' => 'eloquent',
             'model' => App\Models\Student::class,
+        ],
+
+        'doctors' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Doctor::class,
         ],
     ],
 

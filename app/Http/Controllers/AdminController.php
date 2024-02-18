@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 use App\Exceptions\CustomException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+
 
 // Models
 use App\Models\Course;
 use App\Models\Student;
 use App\Models\CourseStudent;
-
+use App\Models\Doctor;
 
 class AdminController extends Controller
 {
@@ -44,11 +46,27 @@ class AdminController extends Controller
     }
 
 
-    public function studentCourses(Request $request) {
+    // public function studentCourses(Request $request) {
 
-        $studentId = Student::where('college_id',$request->id)->first()->id;
-        $courses = Student::find($studentId)->courses()->get();
+    //     $studentId = Student::where('college_id',$request->id)->first()->id;
+    //     $courses = Student::find($studentId)->courses()->get();
 
-        return response()->json(["Courses" => $courses]);
+    //     return response()->json(["Courses" => $courses]);
+    // }
+
+    
+
+    //Add new Doctor
+
+    public function addDoctor(Request $request) 
+    {
+        $data = $request->all();
+
+        Doctor::create([
+            "name" => $data['name'],
+            "password" => Hash::make($data['password']),
+        ]);
+
+        return response()->json(["msg" => "Doctor added successfully"],200);
     }
 }
