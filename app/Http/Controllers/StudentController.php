@@ -7,6 +7,7 @@ use App\Exceptions\CustomException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 
 use function Laravel\Prompts\error;
 
@@ -89,5 +90,35 @@ class StudentController extends Controller
         ]);
 
         return response()->json(["msg" => "Attendence Taken"],200);
+    }
+
+    //Reset password
+
+    public function resetPassword(Request $request)
+    {
+        $request->validateWithBag('resetPassword',[
+            "old_password" => "required",
+            "new_password" => ['required', 'confirmed', Password::min(8)
+            ->letters()
+            ->mixedCase()
+            ->numbers()
+            ->uncompromised()],
+        ],[
+
+        ]);
+
+        $user = $request->user;
+        $hashedPassword = $user->password;
+        $credentials = $request->all();
+
+        if (!hash::check($credentials['old_password'],$hashedPassword)) 
+        throw new CustomException("Wrong password",400);
+
+        $newHasedPassword = Hash::make($credentials['new_password']);
+        $user->password = $newHasedPassword;
+        $user->save();
+
+
+        return response()->json(["msg" => "Password changed Successfully"],200);
     }
 }

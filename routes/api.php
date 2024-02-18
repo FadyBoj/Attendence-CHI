@@ -44,6 +44,7 @@ Route::middleware('customAuth')->group(function() {
 
     Route::controller(StudentController::class)->group(function (){
         Route::post('/take-attendence','takeAttendence')->middleware('attendenceValidation');
+        Route::post('/reset-password','resetPassword');
     
     });
 
