@@ -12,7 +12,8 @@ use Illuminate\Support\Str;
 use App\Models\ActiveLecture;
 use App\Models\Attendence;
 use App\Models\Course;
-
+use App\Models\SignedStudent;
+use App\Models\Student;
 
 class DoctorController extends Controller
 {
@@ -103,6 +104,62 @@ class DoctorController extends Controller
     //Take student attendence manually
     public function takeAttendenceManually(Request $request)
     {
-        return response()->json("This is manuall attendence route",200);
+
+        $request->validateWithBag('manualAttendence',
+        [
+            "college_id" => "required|exists:students",
+            "lecture_id" => "required|exists:active_lectures,id"
+        ],[
+            "college_id.exists" => "Student id not found",
+            "lecture_id.exists" => "Lecture ended"
+        ]);
+
+        $data = $request->all();
+
+        $activeLecture = ActiveLecture::find($data['lecture_id']);
+        $student = Student::where('college_id',$request->college_id)->first();
+
+        if(now()->gt($activeLecture->expireDate))
+        {
+            ActiveLecture::where('id',$data['lecture_id']);
+            throw new CustomException("Lecture Ended");
+        }
+
+        //Check if student attendence already taken for this session
+        $signedStudent = $activeLecture->students()->where('id',$student->id)->get();
+
+        if(count($signedStudent) > 0)
+        throw new CustomException("Student attendence already has been taken",400);
+
+
+        $studentAttendence = Attendence::where('student_id',$student->id)
+        ->where('course_id',$data['lecture_id'])
+        ->first();
+
+        if(Attendence::where('student_id',$student->id)
+        ->where('course_id',$data['lecture_id'])
+        ->exists())
+        {
+            $studentAttendence->count = ($studentAttendence->count + 1);
+            $studentAttendence->save();
+        }
+
+        else
+        {
+            Attendence::create([
+                "student_id" => $student->id,
+                "course_id" => $data['lecture_id'],
+                "count" => 1
+            ]);
+        }
+        
+        SignedStudent::create([
+            "id" => $student->id,
+            "activeLecture_id" => $data['lecture_id']
+        ]);
+
+
+        return response()->json(["msg" => "Student attendence taken successfully"],200);
+
     }
 }
