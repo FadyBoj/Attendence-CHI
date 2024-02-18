@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+
 
 class Attendence extends Model
 {
@@ -17,4 +19,9 @@ class Attendence extends Model
         "course_id",
         "count"
     ];
+
+    public function student(): HasOne
+    {
+        return $this->hasOne(Student::class,'id','student_id');
+    }
 }

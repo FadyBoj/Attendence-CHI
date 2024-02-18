@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 
 //Models 
 use App\Models\ActiveLecture;
+use App\Models\Attendence;
 
 class DoctorController extends Controller
 {
@@ -49,5 +50,17 @@ class DoctorController extends Controller
 
         return response($qr);
 
+    }
+
+    //Get course attendence
+
+    public function getAttendence(Request $request, int $id)
+    {
+        $attendence = Attendence::with('student')->where('course_id',$id)->get();
+
+        if(count($attendence) === 0)
+        throw new CustomException("No attendence for course with id of $id",400);
+
+        return response()->json(["msg" => $attendence],200);
     }
 }
