@@ -8,20 +8,25 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     *
+     * @return void
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('active_lectures', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('doctor_id');
-            $table->date('expireDate');
+            $table->bigIncrements('id');
+            $table->char('doctor_id', 36);
+            $table->char('uniqueId', 36);
+            $table->timestamp('expireDate');
         });
     }
 
     /**
      * Reverse the migrations.
+     *
+     * @return void
      */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('active_lectures');
     }

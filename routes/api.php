@@ -64,6 +64,8 @@ Route::middleware(['customAuth'])->group(function(){
         Route::post('/doctor/lecture','createLecture');
         Route::delete('doctor/lecture','endLecture');
         Route::get('/doctor/course/{id}','getAttendence');
+        Route::get('/doctor/course/{id}/students','courseStudents');
+        Route::post('/doctor/attendence','takeAttendenceManually');
 
 
     });

@@ -1,0 +1,32 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "My First API Documentation",
+        "contact": {
+            "email": "info@yeagger.com"
+        },
+        "version": "0.1"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000/api/documentation",
+            "description": "Learning env"
+        }
+    ],
+    "paths": {
+        "/api/register": {
+            "post": {
+                "summary": "Register a new user",
+                "operationId": "e66ee345dccb8fe3de41f4dde927aac7",
+                "responses": {
+                    "201": {
+                        "description": "User registered successfully"
+                    },
+                    "422": {
+                        "description": "Validation errors"
+                    }
+                }
+            }
+        }
+    }
+}

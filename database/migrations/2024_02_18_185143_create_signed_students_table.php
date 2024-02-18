@@ -8,23 +8,24 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     *
+     * @return void
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('signed_students', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('activeLecture_id')
-            ->references('id')->on('active_lectures')
-            ->onDelete('cascade');
-           
+            $table->char('id', 36)->primary();
+            $table->unsignedBigInteger('activeLecture_id')->index('signed_students_activelecture_id_foreign');
         });
     }
 
     /**
      * Reverse the migrations.
+     *
+     * @return void
      */
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists('signed_users');
+        Schema::dropIfExists('signed_students');
     }
 };

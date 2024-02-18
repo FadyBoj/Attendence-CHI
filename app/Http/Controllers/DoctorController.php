@@ -7,12 +7,16 @@ use Illuminate\Http\Request;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Str;
 
+
 //Models 
 use App\Models\ActiveLecture;
 use App\Models\Attendence;
+use App\Models\Course;
+
 
 class DoctorController extends Controller
 {
+
     public function createLecture(Request $request)
     {
         $request->validateWithBag("createLecture",[
@@ -81,6 +85,24 @@ class DoctorController extends Controller
 
         ActiveLecture::where('id',$id)->delete();
 
-        return response()->json(["msg" => "Lecture Ended successfully"],200);
+        return response()->json(["msg" => "Lecture Ended successfully"],200);   
+    }
+
+    //Get specific course studetns
+    public function courseStudents(Request $request, int $id) 
+    {
+       if(!Course::where('id',$id)->exists())
+       throw new CustomException("Course id not found",400);
+
+       $students = Course::find($id)->students()->get();
+
+       return response()->json(["Students" => $students],200);
+
+    }
+
+    //Take student attendence manually
+    public function takeAttendenceManually(Request $request)
+    {
+        return response()->json("This is manuall attendence route",200);
     }
 }

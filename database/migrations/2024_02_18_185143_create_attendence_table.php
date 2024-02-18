@@ -8,21 +8,26 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     *
+     * @return void
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('attendence', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('student_id');
-            $table->foreignId('course_id');
+            $table->bigIncrements('id');
+            $table->char('student_id', 36);
+            $table->unsignedBigInteger('course_id');
+            $table->integer('count');
             $table->timestamps();
         });
     }
 
     /**
      * Reverse the migrations.
+     *
+     * @return void
      */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('attendence');
     }
