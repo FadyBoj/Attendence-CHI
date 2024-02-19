@@ -32,7 +32,9 @@ Route::controller(AdminController::class)->group(function (){
     Route::post('/admin/student','addStudent')->middleware('addStudentValidation');
     Route::post('/admin/doctor','addDoctor')->middleware('addDoctorValidation');
     Route::post('/admin/add-admin','addAdmin')->middleware('addAdminValidation');
-    Route::post('/courses','studentCourses');
+    Route::post('/admin/courses','addCourse');
+    Route::get('/admin/doctors','getDoctors');
+
 
 });
 
@@ -67,10 +69,11 @@ Route::middleware(['doctorAuth'])->group(function(){
 
     Route::controller(DoctorController::class)->group(function(){
 
+        Route::get('/doctor','doctorInfo');
         Route::post('/doctor/lecture','createLecture');
         Route::delete('doctor/lecture','endLecture');
-        Route::get('/doctor/course/{id}','getAttendence');
-        Route::get('/doctor/course/{id}/students','courseStudents');
+        Route::get('/doctor/courses/{id}','getAttendence');
+        Route::get('/doctor/courses/{id}/students','courseStudents');
         Route::post('/doctor/attendence','takeAttendenceManually');
 
 

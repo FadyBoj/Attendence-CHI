@@ -103,4 +103,31 @@ class AdminController extends Controller
 
         return response()->json(["msg" => "Admin created successfully"],200);
     }
+
+    //Add course
+
+    public function addCourse(Request $request)
+    {
+        $request->validateWithBag('addCourse',[
+            "name" => "required|unique:courses|min:2",
+            "doctor_id" => "required|exists:doctors,id"
+        ],[
+            "doctor.exists" => "Doctor id not found"
+        ]);
+
+        $data = $request->all();
+
+        Course::create([
+            "name" => $data['name'],
+            "doctor_id" => $data['doctor_id']
+        ]);
+
+        return response()->json(["msg" => "Course added successfully"],200);
+    }
+
+    public function getDoctors(Request $request)
+    {
+        $doctors = Doctor::all();
+        return response()->json(["doctors" => $doctors],200);
+    }
 }

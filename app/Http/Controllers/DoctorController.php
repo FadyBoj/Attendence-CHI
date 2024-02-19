@@ -186,4 +186,26 @@ class DoctorController extends Controller
         return response()->json(["msg" => "Student attendence taken successfully"],200);
 
     }
+
+    //Doctor Info
+
+    public function doctorInfo(Request $request)
+    {
+        $user = $request->user;
+        $courses =  $user->courses()->get();
+        // $doctor = Doctor::find($user->id);
+
+        $doctorInfo = [
+            "id" => $user->id,
+            "name" => $user->name,
+            
+        ];
+
+        $allInfo = [
+            "doctor" => $user,
+            "courses" => $courses,
+        ];
+
+        return response()->json(["doctor" => $allInfo   ],200);
+    }
 }

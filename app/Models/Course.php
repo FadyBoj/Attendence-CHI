@@ -16,7 +16,7 @@ class Course extends Model
     protected $primaryKey = "id";
     public $timestamps = false;
 
-    protected $fillabe = [
+    protected $fillable = [
         "name",
         "doctor_id",
     ];
