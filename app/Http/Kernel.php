@@ -70,9 +70,12 @@ class Kernel extends HttpKernel
         "studentLoginValidation" => \App\Http\Middleware\StudentLoginValidation::class,
         "customAuth" => \App\Http\Middleware\CustomAuthentication::class,
         "doctorAuth" => \App\Http\Middleware\DoctorAuthentication::class,
+        "adminAuth" => \App\Http\Middleware\AdminAuthentication::class,
         "doctorAuthorize" => \App\Http\Middleware\DoctorAuthorization::class,
         "attendenceValidation" => \App\Http\Middleware\AttendenceValidation::class,
         "addDoctorValidation" => \App\Http\Middleware\AddDoctorValidation::class,
         "doctorLoginValidation" => \App\Http\Middleware\DoctorLoginValidation::class,
+        "addAdminValidation" => \App\Http\Middleware\AddAdminValidation::class,
+        "adminLoginValidation" => \App\Http\Middleware\AdminLoginValidation::class,
     ];
 }

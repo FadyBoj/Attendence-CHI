@@ -11,9 +11,28 @@ use App\Models\Course;
 use App\Models\Student;
 use App\Models\CourseStudent;
 use App\Models\Doctor;
+use App\Models\Admin;
+
 
 class AdminController extends Controller
 {
+
+    public function adminLogin(Request $request)
+    {
+        $data = $request->all();
+        $adminId = Admin::where('name',$data['name'])->first();
+        $admin = Admin::find($adminId)->first();
+
+        if (!Hash::check($data['password'],$admin->password))
+        throw new CustomException("Name and password are mismatched",400);
+
+
+        $admin->tokens()->delete();
+        $token = $admin->createToken('ApiToken')->accessToken;
+
+        return response()->json(["token" => $token],200);
+    }
+
     public function addStudent(Request $request) 
     {
         $data = $request->all();
@@ -67,6 +86,21 @@ class AdminController extends Controller
             "password" => Hash::make($data['password']),
         ]);
 
+
         return response()->json(["msg" => "Doctor added successfully"],200);
+    }
+
+    //Add another admin
+
+    public function addAdmin(Request $request)
+    {
+        $data = $request->all();
+
+        Admin::create([
+            "name" => $data['name'],
+            "password" => Hash::make($data['password'])
+        ]);
+
+        return response()->json(["msg" => "Admin created successfully"],200);
     }
 }

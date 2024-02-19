@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class DoctorAuthentication
+class AdminAuthentication
 {
     /**
      * Handle an incoming request.
@@ -24,10 +24,10 @@ class DoctorAuthentication
             $token = $request->cookie("accessToken") ?: $request->bearerToken();
             $request->headers->set("Authorization","Bearer " . $token);
 
-            if(!Auth::guard('doctor')->check() || !$token)
+            if(!Auth::guard('admin')->check() || !$token)
             throw new CustomException("unauthenticated",401);
 
-            $user = Auth::guard('doctor')->user();
+            $user = Auth::guard('admin')->user();
 
             $request->merge(["user" => $user]);
 

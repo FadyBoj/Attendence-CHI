@@ -22,6 +22,47 @@ use App\Models\Attendence;
 
 class StudentController extends Controller
 {
+    /**
+ * @OA\Post(
+ *     tags={"Student"},
+ *     path="/api/student/login",
+ *     summary="Login a user",
+ *      @OA\RequestBody(
+ *         @OA\MediaType(
+ *             mediaType="application/json",
+ *             @OA\Schema(
+ *                 @OA\Property(
+ *                     property="college_id",
+ *                     type="number"
+ *                 ),
+ *                 @OA\Property(
+ *                     property="password",
+ *                     type="string"
+ *                 ),
+ *                 example={"college_id": 2021030043,  "password": "AKDhsa92yd"}
+ *             )
+ *         )
+ *     ),
+ *      @OA\Response(
+ *         response=200,
+ *         description="OK",
+ *         @OA\JsonContent(
+ *            
+ *             @OA\Examples(example="result", value={"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5YjVjNTlmNy00ODA3LTQ0M2EtODM4Mi0yM2I5NmM5ZTEyOWYiLCJqdGkiOiI5OTUxYWYw"}, summary="An result object."),
+ *         )
+ *     ),
+ *      @OA\Response(
+ *         response=400,
+ *         description="BAD REQUEST",
+ *         @OA\JsonContent(
+ *            
+ *             @OA\Examples(example="result", value={"msg": "id and password are mismatched"}, summary="An result object."),
+ *         )
+ *     )
+ * )
+ */
+
+
     public function studentLogin(Request $request) 
     {
         $credentials = $request->only("college_id","password");
@@ -39,6 +80,70 @@ class StudentController extends Controller
     } 
 
     //Attendence
+    /**
+    * @OA\SecurityScheme(
+    *     securityScheme="bearerAuth",
+    *     type="http",
+    *     scheme="bearer",
+    *    bearerFormat="JWT",
+    *     description="JWT Token Authentication. Please insert the token in the 'Authorization' header as 'Bearer {token}'.",
+    * )
+    */
+
+    /**
+ * @OA\Post(
+ *     tags={"Student"},
+ *     path="/api/student/take-attendence",
+ *     summary="Take student attendence (required id of the course and the uniqueId assigned to the qr code)",
+ *      
+ *     security={{"bearerAuth": {}}},
+ * 
+ *      @OA\Parameter(
+ *          name="Authorization",
+ *           in="header",
+ *           description="Bearer Token",
+ *           required=true,
+ *              
+ *           @OA\Schema(
+ *              type="string"
+ *           )
+ *      ),
+ * 
+ *      @OA\RequestBody(
+ *         required=true,
+ *         @OA\MediaType(
+ *             mediaType="application/json",
+ *             @OA\Schema(
+ *                 @OA\Property(
+ *                     property="id",
+ *                     type="number"
+ *                 ),
+ *                 @OA\Property(
+ *                     property="uniqueId",
+ *                     type="string"
+ *                 ),
+ *                 example={"id": 4,  "uniqueId": "c5b14707-2e6f-4f58-a3a4-db7f8ff18f49"}
+ *             )
+ *         )
+ *     ),
+ *      @OA\Response(
+ *         response=200,
+ *         description="OK",
+ *         @OA\JsonContent(
+ *            
+ *             @OA\Examples(example="result", value={"msg": "attendence taken"}, summary="An result object."),
+ *         )
+ *     ),
+ *      @OA\Response(
+ *         response=400,
+ *         description="Id student attendence already taken for the day",
+ *         @OA\JsonContent(
+ *            
+ *             @OA\Examples(example="result", value={"msg": "Attendence already taken"}, summary="An result object."),
+ *         )
+ *     )
+ * )
+ */
 
     public function takeAttendence(Request $request)
     {
@@ -94,6 +199,71 @@ class StudentController extends Controller
 
     //Reset password
 
+    /**
+    * @OA\SecurityScheme(
+    *     securityScheme="bearerAuth",
+    *     type="http",
+    *     scheme="bearer",
+    *       bearerFormat="JWT",
+    *     description="JWT Token Authentication. Please insert the token in the 'Authorization' header as 'Bearer {token}'.",
+    * )
+ * @OA\Post(
+ *     tags={"Student"},
+ *     path="/api/student/reset-password",
+ *      
+ *     summary="Reset student password",
+ *     security={{"bearerAuth": {}}},
+ *      @OA\Parameter(
+ *          name="Authorization",
+ *           in="header",
+ *           description="Bearer Token",
+ *           required=true,
+ *              
+ *           @OA\Schema(
+ *              type="string"
+ *           )
+ *           ),
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\MediaType(
+ *             mediaType="application/json",
+ *             @OA\Schema(
+ *                 @OA\Property(
+ *                     property="old_password",
+ *                     type="string",
+ *                     example="2021030043"
+ *                 ),
+ *                 @OA\Property(
+ *                     property="new_password",
+ *                     type="string",
+ *                     example="daswdaFs$3"
+ *                 ),
+ *                 @OA\Property(
+ *                     property="new_password_confirmation",
+ *                     type="string",
+ *                     example="daswdaFs$3"
+ *                 )
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="OK",
+ *         @OA\JsonContent(
+ *             @OA\Examples(example="result", value={"msg": "Password changed Successfully"}, summary="An result object.")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=400,
+ *         description="Wrong password",
+ *         @OA\JsonContent(
+ *             @OA\Examples(example="result", value={"msg": "Wrong password"}, summary="An result object.")
+ *         )
+ *     )
+ * )
+ */
+
+
     public function resetPassword(Request $request)
     {
         $request->validateWithBag('resetPassword',[
@@ -121,4 +291,5 @@ class StudentController extends Controller
 
         return response()->json(["msg" => "Password changed Successfully"],200);
     }
+    
 }

@@ -13,12 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('doctors', function (Blueprint $table) {
-            $table->dropColumn('id');
-        });
-
-        Schema::table('doctors', function (Blueprint $table) {
-            $table->uuid('id')->primary()->unique()->first();
+        Schema::create('admins', function (Blueprint $table) {
+            $table->char('id', 36)->primary();
+            $table->string('name')->unique();
+            $table->string('password');
+            $table->string('role')->default('admin');
         });
     }
 
@@ -29,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-
+        Schema::dropIfExists('admins');
     }
 };

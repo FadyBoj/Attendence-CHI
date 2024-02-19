@@ -13,9 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('doctors', function (Blueprint $table) {
-            $table->string('name')->unique()->change();
-            $table->string('password')->after('name');
+        Schema::create('doctors', function (Blueprint $table) {
+            $table->char('id', 36)->primary();
+            $table->string('name')->unique();
+            $table->string('password');
+            $table->string('role')->default('doctor');
+            $table->timestamps();
         });
     }
 

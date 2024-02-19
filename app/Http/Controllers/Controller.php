@@ -9,15 +9,15 @@ use Illuminate\Routing\Controller as BaseController;
 
 /**
  * @OA\Info(
- *     title="My First API Documentation",
+ *     title="CHI-ATTENDENCE Documentation",
  *     version="0.1",
  *      @OA\Contact(
  *          email="info@yeagger.com"
  *      ),
  * ),
  *  @OA\Server(
- *      description="Learning env",
- *      url="http://localhost:8000/api/documentation"
+ *      description="API DOCUMENTATION",
+ *      url="http://localhost:8000/api/documentationS"
  *  ),
  */
 

@@ -7,10 +7,8 @@ use Closure;
 use Exception;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Validation\Rules\Password;
 
-
-class AddDoctorValidation
+class AdminLoginValidation
 {
     /**
      * Handle an incoming request.
@@ -21,22 +19,19 @@ class AddDoctorValidation
     {
         try
         {
-            $request->validateWithBag('addDoctor',[
-                "name" => "required|unique:doctors|string|min:3",
-                "password" => ['required', 'confirmed', Password::min(8)
-                ->letters()
-                ->mixedCase()
-                ->numbers()
-                ->uncompromised()],
-            ],[ 
-
+            $request->validateWithBag('doctorLogin',[
+                "name" => "required|exists:admins",
+                "password" => "required"
+            ],[
+                "name.exists" => "Name and password are mismatched"
             ]);
 
             return $next($request);
+
         }
         catch(Exception $e)
         {
-            throw new CustomException($e->getMessage(),500);
+            throw new CustomException($e->getMessage(),400);
         }
     }
 }

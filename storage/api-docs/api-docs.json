@@ -1,7 +1,7 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "My First API Documentation",
+        "title": "CHI-ATTENDENCE Documentation",
         "contact": {
             "email": "info@yeagger.com"
         },
@@ -9,23 +9,247 @@
     },
     "servers": [
         {
-            "url": "http://localhost:8000/api/documentation",
-            "description": "Learning env"
+            "url": "http://localhost:8000/api/documentationS",
+            "description": "API DOCUMENTATION"
         }
     ],
     "paths": {
-        "/api/register": {
+        "/api/student/login": {
             "post": {
-                "summary": "Register a new user",
-                "operationId": "e66ee345dccb8fe3de41f4dde927aac7",
+                "tags": [
+                    "Student"
+                ],
+                "summary": "Login a user",
+                "operationId": "f7e53779e62076fb248933cd9fdb6127",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "college_id": {
+                                        "type": "number"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "college_id": 2021030043,
+                                    "password": "AKDhsa92yd"
+                                }
+                            }
+                        }
+                    }
+                },
                 "responses": {
-                    "201": {
-                        "description": "User registered successfully"
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "examples": {
+                                    "result": {
+                                        "summary": "An result object.",
+                                        "value": {
+                                            "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5YjVjNTlmNy00ODA3LTQ0M2EtODM4Mi0yM2I5NmM5ZTEyOWYiLCJqdGkiOiI5OTUxYWYw"
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     },
-                    "422": {
-                        "description": "Validation errors"
+                    "400": {
+                        "description": "BAD REQUEST",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "examples": {
+                                    "result": {
+                                        "summary": "An result object.",
+                                        "value": {
+                                            "msg": "id and password are mismatched"
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
+            }
+        },
+        "/api/student/take-attendence": {
+            "post": {
+                "tags": [
+                    "Student"
+                ],
+                "summary": "Take student attendence (required id of the course and the uniqueId assigned to the qr code)",
+                "operationId": "a4f4a796ea16715fa15c7f804c4b2076",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Bearer Token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "id": {
+                                        "type": "number"
+                                    },
+                                    "uniqueId": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "id": 4,
+                                    "uniqueId": "c5b14707-2e6f-4f58-a3a4-db7f8ff18f49"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "examples": {
+                                    "result": {
+                                        "summary": "An result object.",
+                                        "value": {
+                                            "msg": "attendence taken"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Id student attendence already taken for the day",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "examples": {
+                                    "result": {
+                                        "summary": "An result object.",
+                                        "value": {
+                                            "msg": "Attendence already taken"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/student/reset-password": {
+            "post": {
+                "tags": [
+                    "Student"
+                ],
+                "summary": "Reset student password",
+                "operationId": "c107454c48d49183c5a1e4c9b394cd29",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Bearer Token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "old_password": {
+                                        "type": "string",
+                                        "example": "2021030043"
+                                    },
+                                    "new_password": {
+                                        "type": "string",
+                                        "example": "daswdaFs$3"
+                                    },
+                                    "new_password_confirmation": {
+                                        "type": "string",
+                                        "example": "daswdaFs$3"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "examples": {
+                                    "result": {
+                                        "summary": "An result object.",
+                                        "value": {
+                                            "msg": "Password changed Successfully"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Wrong password",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "examples": {
+                                    "result": {
+                                        "summary": "An result object.",
+                                        "value": {
+                                            "msg": "Wrong password"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "description": "JWT Token Authentication. Please insert the token in the 'Authorization' header as 'Bearer {token}'.",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
             }
         }
     }

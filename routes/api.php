@@ -20,24 +20,23 @@ use App\Http\Controllers\DoctorController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-Route::get('/qr',function () {
-    return response()->json(["msg" => "This is a qr code test"]);
-});
-
 
 //Admin controller
 
 Route::controller(AdminController::class)->group(function (){
+    Route::post('admin/login','adminLogin')->middleware('adminLoginValidation');
+});
+Route::middleware(['adminAuth'])->group(function(){
+
+Route::controller(AdminController::class)->group(function (){
     Route::post('/admin/student','addStudent')->middleware('addStudentValidation');
     Route::post('/admin/doctor','addDoctor')->middleware('addDoctorValidation');
+    Route::post('/admin/add-admin','addAdmin')->middleware('addAdminValidation');
     Route::post('/courses','studentCourses');
 
 });
 
+});
 
 //Student Constroller
 
@@ -45,15 +44,15 @@ Route::controller(AdminController::class)->group(function (){
 Route::middleware('customAuth')->group(function() {
 
     Route::controller(StudentController::class)->group(function (){
-        Route::post('/take-attendence','takeAttendence')->middleware('attendenceValidation');
-        Route::post('/reset-password','resetPassword');
+        Route::post('/student/take-attendence','takeAttendence')->middleware('attendenceValidation');
+        Route::post('/student/reset-password','resetPassword');
     
     });
 
 });
 
 Route::controller(StudentController::class)->group(function (){
-    Route::post('/student-login','studentLogin')->middleware('studentLoginValidation');
+    Route::post('/student/login','studentLogin')->middleware('studentLoginValidation');
 
 });
 

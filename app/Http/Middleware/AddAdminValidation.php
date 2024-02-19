@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Validation\Rules\Password;
 
 
-class AddDoctorValidation
+class AddAdminValidation
 {
     /**
      * Handle an incoming request.
@@ -21,8 +21,8 @@ class AddDoctorValidation
     {
         try
         {
-            $request->validateWithBag('addDoctor',[
-                "name" => "required|unique:doctors|string|min:3",
+            $request->validateWithBag('addAdmin',[
+                "name" => "required|unique:admins|min:3|string",
                 "password" => ['required', 'confirmed', Password::min(8)
                 ->letters()
                 ->mixedCase()
@@ -33,10 +33,11 @@ class AddDoctorValidation
             ]);
 
             return $next($request);
+
         }
         catch(Exception $e)
         {
-            throw new CustomException($e->getMessage(),500);
+            throw new CustomException($e->getMessage(),400);
         }
     }
 }
